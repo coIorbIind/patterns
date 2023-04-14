@@ -21,7 +21,7 @@ void TaxiBuilder::add_passenger(Passenger *new_passenger) {
 void TaxiBuilder::add_child_seat() {
     Taxi* car = dynamic_cast<Taxi*>(this->object);
     if (car == nullptr) {
-        cout << "Wrong passenger" << endl;
+        cout << "Can't add child seat" << endl;
     }
     car->add_child_seat();
 }
