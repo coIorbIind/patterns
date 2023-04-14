@@ -115,6 +115,45 @@ private:
     vector<Component *> pilots;
     int max_luggage;
 public:
+    Component* getEconomyClass() {
+        EconomyClass *cls;
+        for (int i = 0; i < classes.size(); ++i) {
+            cls = dynamic_cast<EconomyClass *>(classes[i]);
+            if (cls != nullptr) {
+                return classes[i];
+            }
+        }
+        return nullptr;
+    }
+    void checkBeforeStart() {
+        Component* economyClass = this->getEconomyClass();
+        if (economyClass == nullptr) {
+            cout << "We have no economy class\n";
+        }
+        else {
+            if (this->getLuggage() > this->getMaxLuggage()){
+                int old = this->getLuggage();
+                int diff = this->getLuggage() - this->getMaxLuggage();
+                cout << "We have extra " << diff << " kg\n";
+                if (diff > economyClass->getLuggage()) {
+                    cout << "We have too much luggage in business and first classes.\n"
+                            "Please remove " << diff - economyClass->getLuggage() << " kg\n";
+                } else {
+                    int percents = (100 * diff) /  economyClass->getLuggage();
+                    int new_lug;
+                    for (int i = 0; i < economyClass->personsCount(); ++i) {
+                        new_lug = economyClass->getPersons()[i]->getLuggage() * (100 - percents) / 100;
+                        economyClass->getPersons()[i]->setLuggage(new_lug);
+                    }
+                    cout << "Removed " << old - this->getLuggage() << " kg from economy class\n";
+                    cout << "New luggage " << this->getLuggage() << " kg\n";
+                }
+            } else {
+                cout << "Luggage is ok\n";
+            }
+        }
+    }
+
     Plane(int max_lug) { max_luggage = max_lug; }
 
     int getMaxLuggage() { return max_luggage; }
