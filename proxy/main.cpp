@@ -1,10 +1,12 @@
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
-#include "Proxy.h"
+#include "RealImage.h"
+#include "ProxyImage.h"
 
 using namespace sf;
 
@@ -13,17 +15,22 @@ int main() {
     if (!background.loadFromFile(R"(D:\University\third_year\patterns\proxy\data\lake.jpg)"))
         return -1;
 
-    RenderWindow window(VideoMode(background.getSize().x, background.getSize().y), "ImageController");
+    RenderWindow window(VideoMode(background.getSize().x + 300, background.getSize().y + 200), "ImageController");
 
     Texture texture;
     texture.loadFromImage(background);
 
-    Sprite sprite;
-    sprite.setTexture(texture);
-    sprite.setPosition(0, 0);
     Event event;
-    Proxy *proxy = new Proxy(&window, &sprite);
+
+    RectangleShape rectangle(sf::Vector2f((float)background.getSize().x, (float)background.getSize().y));
+    rectangle.setPosition(10, 10);
+    window.draw(rectangle);
+    window.display();
+
+    RealImage *image = new RealImage(&window, &texture, &rectangle);
+    ProxyImage *proxy = new ProxyImage(image);
     window.setFramerateLimit(60);
+
     while (window.isOpen()) {
         while (window.pollEvent(event)) {
             if (event.type == Event::MouseButtonPressed) {

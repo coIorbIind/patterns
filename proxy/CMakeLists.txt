@@ -3,7 +3,7 @@ project(proxy)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(proxy main.cpp Proxy.h)
+add_executable(proxy main.cpp Proxy.h RealImage.h ProxyImage.h)
 
 
 set(SFML_STATIC_LIBRARIES TRUE)
